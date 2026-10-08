@@ -1,0 +1,170 @@
+/* Pastel coffee theme */
+:root {
+  color-scheme: light;
+  --background: #f5eee6;
+  --surface: #eadbcd;
+  --border: #d5bfab;
+  --text: #493529;
+  --muted: #806958;
+  --accent: #946b50;
+}
+
+body {
+  background-color: var(--background);
+  background-image:
+    linear-gradient(
+      rgb(245 238 230 / 75%),
+      rgb(245 238 230 / 75%)
+    ),
+    url("images/coffee-background.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.sidebar,
+.right-sidebar {
+  background: rgb(245 238 230 / 88%);
+}
+
+main {
+  background: rgb(255 250 244 / 94%);
+}
+
+.feed-header {
+  background: rgb(245 235 224 / 94%);
+}
+
+.logo,
+.nav-link,
+.tab.active {
+  color: var(--text);
+}
+
+.nav-link:hover,
+.account:hover,
+.tab:hover {
+  background: #e7d6c5;
+}
+
+.primary-button {
+  background: #946b50;
+  color: #fffaf5;
+}
+
+.primary-button:hover {
+  background: #7a543e;
+}
+
+.primary-button:disabled {
+  background: #946b50;
+}
+
+.avatar {
+  background: #b58c70 !important;
+  color: #fffaf5;
+}
+
+.post:nth-child(3n + 2) .avatar,
+.follow-person:nth-of-type(2) .avatar {
+  background: #947662 !important;
+}
+
+.post:nth-child(3n + 3) .avatar {
+  background: #aa8178 !important;
+}
+
+.composer-note,
+.verified {
+  color: #946b50;
+}
+
+textarea {
+  color: var(--text);
+}
+
+textarea::placeholder,
+.search::placeholder {
+  color: var(--muted);
+}
+
+.post:hover {
+  background: rgb(224 201 179 / 20%);
+}
+
+.post-card {
+  border-color: #c6a78c;
+  background:
+    radial-gradient(
+      circle at 85% 20%,
+      #f9e7ce 0,
+      transparent 45%
+    ),
+    linear-gradient(135deg, #d8b99b, #b58d70);
+  color: #493529;
+}
+
+.action:hover {
+  background: #ead9c8;
+  color: #79543d;
+}
+
+.action.liked {
+  color: #a65f65;
+}
+
+.action.reposted {
+  color: #697b5c;
+}
+
+.action.saved {
+  color: #8d6246;
+}
+
+.search {
+  border-color: var(--border);
+  background: #efe2d5;
+  color: var(--text);
+}
+
+.search:focus {
+  border-color: var(--accent);
+}
+
+.panel {
+  border-color: var(--border);
+  background: rgb(248 239 229 / 92%);
+}
+
+.follow-button {
+  border-color: #946b50;
+  background: #946b50;
+  color: #fffaf5;
+}
+
+.follow-button:hover {
+  background: #7a543e;
+  opacity: 1;
+}
+
+.follow-button[aria-pressed="true"] {
+  border-color: #b5977f;
+  background: #e8d7c6;
+  color: #624733;
+}
+
+::selection {
+  background: #d5b699;
+  color: #3f2e23;
+}
+
+@media (max-width: 520px) {
+  .sidebar {
+    background: #f1e5d8;
+  }
+
+  body {
+    background-attachment: scroll;
+  }
+}

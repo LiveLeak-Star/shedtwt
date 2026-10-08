@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Koffee</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main class="layout">
+    <form class="composer" id="post-form">
+      <label for="post-input">Create a post</label>
+
+      <textarea
+        id="post-input"
+        placeholder="What's on your mind?"
+        maxlength="280"
+        required
+      ></textarea>
+
+      <div class="composer-footer">
+        <span class="character-count" id="character-count">
+          0 / 280
+        </span>
+
+        <button
+          class="post-button"
+          id="post-button"
+          type="submit"
+          disabled
+        >
+          Post
+        </button>
+      </div>
+    </form>
+
+    <section class="feed" id="feed" aria-labelledby="feed-title" tabindex="0">
+      <header class="feed-header">
+        <h2 id="feed-title">Your feed</h2>
+      </header>
+
+      <div id="posts">
+        <div class="empty-state" id="empty-state">
+          <h3>A fresh start</h3>
+          <p>Create your first post using the box above.</p>
+        </div>
+      </div>
+    </section>
+
+    <p class="sr-only" id="status" role="status"></p>
+  </main>
+
+  <script>
+    const form = document.querySelector("#post-form");
+    const input = document.querySelector("#post-input");
+    const button = document.querySelector("#post-button");
+    const counter = document.querySelector("#character-count");
+    const posts = document.querySelector("#posts");
+    const feed = document.querySelector("#feed");
+    const status = document.querySelector("#status");
+
+    input.addEventListener("input", () => {
+      counter.textContent = `${input.value.length} / 280`;
+      button.disabled = input.value.trim().length === 0;
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const text = input.value.trim();
+
+      if (!text || text.length > 280) return;
+
+      document.querySelector("#empty-state")?.remove();
+
+      const article = document.createElement("article");
+      article.className = "post";
+
+      const header = document.createElement("header");
+      header.className = "post-header";
+
+      const avatar = document.createElement("div");
+      avatar.className = "avatar";
+      avatar.textContent = "YOU";
+      avatar.setAttribute("aria-hidden", "true");
+
+      const details = document.createElement("div");
+
+      const author = document.createElement("strong");
+      author.className = "post-author";
+      author.textContent = "You";
+
+      const now = new Date();
+      const time = document.createElement("time");
+      time.className = "post-time";
+      time.dateTime = now.toISOString();
+      time.textContent = now.toLocaleString([], {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      });
+
+      const content = document.createElement("p");
+      content.className = "post-text";
+      content.textContent = text;
+
+      details.append(author, time);
+      header.append(avatar, details);
+      article.append(header, content);
+      posts.prepend(article);
+
+      input.value = "";
+      counter.textContent = "0 / 280";
+      button.disabled = true;
+
+      feed.scrollTop = 0;
+      input.focus();
+      status.textContent = `Post added at ${time.textContent}.`;
+    });
+  </script>
+</body>
+</html>
