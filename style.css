@@ -1,170 +1,278 @@
-/* Pastel coffee theme */
+* {
+  box-sizing: border-box;
+}
+
 :root {
   color-scheme: light;
-  --background: #f5eee6;
-  --surface: #eadbcd;
-  --border: #d5bfab;
-  --text: #493529;
-  --muted: #806958;
-  --accent: #946b50;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #49372b;
+  background: #eee2d5;
 }
 
 body {
-  background-color: var(--background);
-  background-image:
+  margin: 0;
+  height: 100vh;
+  height: 100dvh;
+  padding: 28px 16px;
+  background:
     linear-gradient(
-      rgb(245 238 230 / 75%),
-      rgb(245 238 230 / 75%)
+      rgb(239 229 217 / 65%),
+      rgb(239 229 217 / 65%)
     ),
-    url("images/coffee-background.jpg");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+    url("images/coffee-background.jpg") center / cover no-repeat;
 }
 
-.sidebar,
-.right-sidebar {
-  background: rgb(245 238 230 / 88%);
+button,
+textarea {
+  font: inherit;
 }
 
-main {
-  background: rgb(255 250 244 / 94%);
+button {
+  cursor: pointer;
 }
 
-.feed-header {
-  background: rgb(245 235 224 / 94%);
+button:focus-visible,
+textarea:focus-visible,
+.feed:focus-visible {
+  outline: 3px solid #997254;
+  outline-offset: 4px;
 }
 
-.logo,
-.nav-link,
-.tab.active {
-  color: var(--text);
+/* One centered column */
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 620px;
+  height: 100%;
+  margin: 0 auto;
 }
 
-.nav-link:hover,
-.account:hover,
-.tab:hover {
-  background: #e7d6c5;
+/* Floating post box */
+.composer {
+  flex-shrink: 0;
+  padding: 22px;
+  border: 1px solid #d8c2ad;
+  border-radius: 22px;
+  background: #fff8f0;
+  box-shadow: 0 10px 30px rgb(78 52 32 / 12%);
 }
 
-.primary-button {
-  background: #946b50;
-  color: #fffaf5;
+.composer h1 {
+  margin: 0 0 16px;
+  font-family: Georgia, serif;
+  font-size: 26px;
 }
 
-.primary-button:hover {
-  background: #7a543e;
-}
-
-.primary-button:disabled {
-  background: #946b50;
-}
-
-.avatar {
-  background: #b58c70 !important;
-  color: #fffaf5;
-}
-
-.post:nth-child(3n + 2) .avatar,
-.follow-person:nth-of-type(2) .avatar {
-  background: #947662 !important;
-}
-
-.post:nth-child(3n + 3) .avatar {
-  background: #aa8178 !important;
-}
-
-.composer-note,
-.verified {
-  color: #946b50;
+.composer label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: bold;
 }
 
 textarea {
-  color: var(--text);
+  display: block;
+  width: 100%;
+  height: 90px;
+  padding: 14px;
+  resize: none;
+  border: 1px solid #dcc8b5;
+  border-radius: 12px;
+  background: #f5ebe0;
+  color: #49372b;
+  line-height: 1.5;
 }
 
-textarea::placeholder,
-.search::placeholder {
-  color: var(--muted);
+textarea::placeholder {
+  color: #856f5c;
 }
 
-.post:hover {
-  background: rgb(224 201 179 / 20%);
+.composer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 14px;
 }
 
-.post-card {
-  border-color: #c6a78c;
-  background:
-    radial-gradient(
-      circle at 85% 20%,
-      #f9e7ce 0,
-      transparent 45%
-    ),
-    linear-gradient(135deg, #d8b99b, #b58d70);
-  color: #493529;
+.character-count {
+  color: #806a58;
+  font-size: 13px;
 }
 
-.action:hover {
-  background: #ead9c8;
-  color: #79543d;
+.post-button {
+  padding: 11px 28px;
+  border: none;
+  border-radius: 999px;
+  background: #886247;
+  color: #fffaf4;
+  font-weight: bold;
 }
 
-.action.liked {
-  color: #a65f65;
+.post-button:hover {
+  background: #6f4e38;
 }
 
-.action.reposted {
-  color: #697b5c;
+.post-button:disabled {
+  opacity: 0.45;
+  cursor: default;
 }
 
-.action.saved {
-  color: #8d6246;
+/* Independently scrollable feed */
+.feed {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid #d8c2ad;
+  border-radius: 22px;
+  background: #fbf4eb;
+  box-shadow: 0 8px 28px rgb(78 52 32 / 8%);
+  scrollbar-width: thin;
+  scrollbar-color: #b99b80 #f5ebe0;
 }
 
-.search {
-  border-color: var(--border);
-  background: #efe2d5;
-  color: var(--text);
+.feed-header {
+  position: sticky;
+  z-index: 1;
+  top: 0;
+  padding: 18px 22px;
+  border-bottom: 1px solid #e2d1c0;
+  background: #fbf4eb;
 }
 
-.search:focus {
-  border-color: var(--accent);
+.feed-header h2 {
+  margin: 0;
+  font-size: 18px;
 }
 
-.panel {
-  border-color: var(--border);
-  background: rgb(248 239 229 / 92%);
+.post {
+  padding: 24px 22px;
+  border-bottom: 1px solid #e2d1c0;
 }
 
-.follow-button {
-  border-color: #946b50;
-  background: #946b50;
-  color: #fffaf5;
+.post:last-child {
+  border-bottom: none;
 }
 
-.follow-button:hover {
-  background: #7a543e;
-  opacity: 1;
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.follow-button[aria-pressed="true"] {
-  border-color: #b5977f;
-  background: #e8d7c6;
-  color: #624733;
+.avatar {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #d9bba0;
+  color: #533c2c;
+  font-size: 13px;
+  font-weight: bold;
 }
 
-::selection {
-  background: #d5b699;
-  color: #3f2e23;
+.post-author {
+  display: block;
+  font-size: 14px;
+}
+
+.post-time {
+  display: block;
+  margin-top: 4px;
+  color: #806a58;
+  font-size: 12px;
+}
+
+.post-text {
+  margin: 16px 0 0;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.empty-state {
+  padding: 60px 24px;
+  text-align: center;
+}
+
+.empty-state h3 {
+  margin: 0 0 10px;
+  font-family: Georgia, serif;
+  font-size: 25px;
+}
+
+.empty-state p {
+  margin: 0;
+  color: #806a58;
+  line-height: 1.6;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 @media (max-width: 520px) {
-  .sidebar {
-    background: #f1e5d8;
+  body {
+    padding: 12px;
   }
 
+  .layout {
+    gap: 16px;
+  }
+
+  .composer {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .composer h1 {
+    font-size: 23px;
+  }
+
+  .feed {
+    border-radius: 16px;
+  }
+
+  .post {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-height: 600px) {
   body {
-    background-attachment: scroll;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .layout {
+    gap: 12px;
+  }
+
+  .composer {
+    padding: 12px;
+  }
+
+  .composer h1 {
+    margin-bottom: 8px;
+    font-size: 20px;
+  }
+
+  textarea {
+    height: 60px;
+  }
+
+  .composer-footer {
+    margin-top: 8px;
   }
 }
