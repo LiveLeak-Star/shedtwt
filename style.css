@@ -9,6 +9,10 @@
   background: #eee2d5;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 body {
   margin: 0;
   height: 100vh;
@@ -19,10 +23,11 @@ body {
       rgb(239 229 217 / 65%),
       rgb(239 229 217 / 65%)
     ),
-    url("images/coffee-background.jpg") center / cover no-repeat;
+    url("Aesthetics/ThemeBG.jpg") center / cover no-repeat;
 }
 
 button,
+input,
 textarea {
   font: inherit;
 }
@@ -32,21 +37,94 @@ button {
 }
 
 button:focus-visible,
+input:focus-visible,
 textarea:focus-visible,
 .feed:focus-visible {
   outline: 3px solid #997254;
   outline-offset: 4px;
 }
 
+/* Sidebar + main column */
+.app {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 900px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.sidebar {
+  flex-shrink: 0;
+  align-self: flex-start;
+  width: 220px;
+  padding: 22px 14px;
+  border: 1px solid #d8c2ad;
+  border-radius: 22px;
+  background: #fff8f0;
+  box-shadow: 0 10px 30px rgb(78 52 32 / 12%);
+}
+
+.brand {
+  margin: 0 0 18px 10px;
+  font-family: Georgia, serif;
+  font-size: 26px;
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 12px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #49372b;
+  font-size: 15px;
+  text-align: left;
+}
+
+.nav-button svg {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav-button:hover {
+  background: #f5ebe0;
+}
+
+.nav-button[aria-current="page"] {
+  background: #886247;
+  color: #fffaf4;
+  font-weight: bold;
+}
+
 /* One centered column */
 .layout {
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: 24px;
-  width: 100%;
+  min-width: 0;
   max-width: 620px;
   height: 100%;
-  margin: 0 auto;
 }
 
 /* Floating post box */
@@ -72,12 +150,11 @@ textarea:focus-visible,
   font-weight: bold;
 }
 
-textarea {
+textarea,
+.text-input {
   display: block;
   width: 100%;
-  height: 90px;
   padding: 14px;
-  resize: none;
   border: 1px solid #dcc8b5;
   border-radius: 12px;
   background: #f5ebe0;
@@ -85,7 +162,13 @@ textarea {
   line-height: 1.5;
 }
 
-textarea::placeholder {
+textarea {
+  height: 90px;
+  resize: none;
+}
+
+textarea::placeholder,
+.text-input::placeholder {
   color: #856f5c;
 }
 
@@ -102,7 +185,8 @@ textarea::placeholder {
   font-size: 13px;
 }
 
-.post-button {
+.post-button,
+.danger-button {
   padding: 11px 28px;
   border: none;
   border-radius: 999px;
@@ -120,7 +204,7 @@ textarea::placeholder {
   cursor: default;
 }
 
-/* Independently scrollable feed */
+/* Independently scrollable feed and panels */
 .feed {
   flex: 1;
   min-height: 0;
@@ -196,6 +280,52 @@ textarea::placeholder {
   line-height: 1.7;
 }
 
+body[data-size="small"] .post-text {
+  font-size: 14px;
+}
+
+body[data-size="large"] .post-text {
+  font-size: 18px;
+}
+
+body.hide-times .post-time {
+  display: none;
+}
+
+.bookmark-button {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  margin-left: auto;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #806a58;
+}
+
+.bookmark-button:hover {
+  background: #f0e3d4;
+}
+
+.bookmark-button svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+}
+
+.bookmark-button[aria-pressed="true"] {
+  color: #886247;
+}
+
+.bookmark-button[aria-pressed="true"] svg {
+  fill: currentcolor;
+}
+
 .empty-state {
   padding: 60px 24px;
   text-align: center;
@@ -213,6 +343,85 @@ textarea::placeholder {
   line-height: 1.6;
 }
 
+/* Profile + settings panels */
+.panel-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 22px;
+}
+
+.field label,
+.field legend {
+  display: block;
+  margin-bottom: 8px;
+  padding: 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+fieldset.field {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.profile-top {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.avatar-large {
+  width: 72px;
+  height: 72px;
+  font-size: 22px;
+}
+
+.stats {
+  display: flex;
+  gap: 28px;
+  margin: 0;
+}
+
+.stats dt {
+  color: #806a58;
+  font-size: 13px;
+}
+
+.stats dd {
+  margin: 4px 0 0;
+  font-family: Georgia, serif;
+  font-size: 24px;
+}
+
+.choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.choice-row label,
+.check-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: normal;
+}
+
+.danger-button {
+  align-self: flex-start;
+  background: #fff8f0;
+  border: 1px solid #a8523f;
+  color: #8a3d2c;
+}
+
+.danger-button:hover {
+  background: #f6e2dc;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -220,6 +429,41 @@ textarea::placeholder {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .app {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .sidebar {
+    align-self: stretch;
+    width: 100%;
+    padding: 8px;
+    border-radius: 16px;
+  }
+
+  .brand {
+    display: none;
+  }
+
+  .nav-list {
+    flex-direction: row;
+    gap: 2px;
+  }
+
+  .nav-list li {
+    flex: 1;
+  }
+
+  .nav-button {
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 4px;
+    font-size: 12px;
+    text-align: center;
+  }
 }
 
 @media (max-width: 520px) {
@@ -246,6 +490,10 @@ textarea::placeholder {
 
   .post {
     padding: 20px 16px;
+  }
+
+  .panel-body {
+    padding: 16px;
   }
 }
 

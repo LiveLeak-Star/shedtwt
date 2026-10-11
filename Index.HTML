@@ -8,48 +8,134 @@
 </head>
 
 <body>
-  <main class="layout">
-    <form class="composer" id="post-form">
-      <label for="post-input">Create a post</label>
+  <div class="app">
+    <aside class="sidebar">
+      <p class="brand">Koffee</p>
 
-      <textarea
-        id="post-input"
-        placeholder="What's on your mind?"
-        maxlength="280"
-        required
-      ></textarea>
+      <nav aria-label="Main">
+        <ul class="nav-list">
+          <li>
+            <button class="nav-button" type="button" data-view="home" aria-current="page">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h14V10"/></svg>
+              Home
+            </button>
+          </li>
+          <li>
+            <button class="nav-button" type="button" data-view="bookmarks">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>
+              Bookmarks
+            </button>
+          </li>
+          <li>
+            <button class="nav-button" type="button" data-view="profile">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+              Your profile
+            </button>
+          </li>
+          <li>
+            <button class="nav-button" type="button" data-view="settings">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h5M15 6h5M4 12h11M21 12h-2M4 18h2M12 18h8"/><circle cx="12" cy="6" r="2.5"/><circle cx="17" cy="12" r="2.5"/><circle cx="9" cy="18" r="2.5"/></svg>
+              Settings
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </aside>
 
-      <div class="composer-footer">
-        <span class="character-count" id="character-count">
-          0 / 280
-        </span>
+    <main class="layout">
+      <form class="composer" id="post-form">
+        <label for="post-input">Create a post</label>
 
-        <button
-          class="post-button"
-          id="post-button"
-          type="submit"
-          disabled
-        >
-          Post
-        </button>
-      </div>
-    </form>
+        <textarea
+          id="post-input"
+          placeholder="What's on your mind?"
+          maxlength="280"
+          required
+        ></textarea>
 
-    <section class="feed" id="feed" aria-labelledby="feed-title" tabindex="0">
-      <header class="feed-header">
-        <h2 id="feed-title">Your feed</h2>
-      </header>
+        <div class="composer-footer">
+          <span class="character-count" id="character-count">
+            0 / 280
+          </span>
 
-      <div id="posts">
-        <div class="empty-state" id="empty-state">
-          <h3>A fresh start</h3>
-          <p>Create your first post using the box above.</p>
+          <button
+            class="post-button"
+            id="post-button"
+            type="submit"
+            disabled
+          >
+            Post
+          </button>
         </div>
-      </div>
-    </section>
+      </form>
 
-    <p class="sr-only" id="status" role="status"></p>
-  </main>
+      <!-- Feed (used for Home and Bookmarks) -->
+      <section class="feed" id="feed" aria-labelledby="feed-title" tabindex="0">
+        <header class="feed-header">
+          <h2 id="feed-title">Your feed</h2>
+        </header>
+        <div id="posts"></div>
+      </section>
+
+      <!-- Profile -->
+      <section class="feed" id="profile-panel" aria-labelledby="profile-title" tabindex="0" hidden>
+        <header class="feed-header">
+          <h2 id="profile-title">Your profile</h2>
+        </header>
+        <div class="panel-body">
+          <div class="profile-top">
+            <div class="avatar avatar-large" id="profile-avatar" aria-hidden="true">YO</div>
+            <dl class="stats">
+              <div>
+                <dt>Posts</dt>
+                <dd id="stat-posts">0</dd>
+              </div>
+              <div>
+                <dt>Bookmarks</dt>
+                <dd id="stat-bookmarks">0</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="field">
+            <label for="profile-name">Display name</label>
+            <input class="text-input" id="profile-name" type="text" maxlength="30" value="You">
+          </div>
+
+          <div class="field">
+            <label for="profile-bio">Bio</label>
+            <textarea id="profile-bio" maxlength="160" placeholder="Tell people what you're brewing."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings -->
+      <section class="feed" id="settings-panel" aria-labelledby="settings-title" tabindex="0" hidden>
+        <header class="feed-header">
+          <h2 id="settings-title">Settings</h2>
+        </header>
+        <div class="panel-body">
+          <fieldset class="field">
+            <legend>Post text size</legend>
+            <div class="choice-row">
+              <label><input type="radio" name="text-size" value="small"> Small</label>
+              <label><input type="radio" name="text-size" value="default" checked> Default</label>
+              <label><input type="radio" name="text-size" value="large"> Large</label>
+            </div>
+          </fieldset>
+
+          <label class="check-row">
+            <input type="checkbox" id="show-times" checked>
+            Show post times
+          </label>
+
+          <button class="danger-button" id="clear-posts" type="button">Delete all posts</button>
+        </div>
+      </section>
+
+      <p class="sr-only" id="status" role="status"></p>
+    </main>
+  </div>
 
   <script>
     const form = document.querySelector("#post-form");
@@ -58,7 +144,152 @@
     const counter = document.querySelector("#character-count");
     const posts = document.querySelector("#posts");
     const feed = document.querySelector("#feed");
+    const feedTitle = document.querySelector("#feed-title");
     const status = document.querySelector("#status");
+    const profilePanel = document.querySelector("#profile-panel");
+    const settingsPanel = document.querySelector("#settings-panel");
+    const navButtons = document.querySelectorAll(".nav-button");
+
+    const BOOKMARK_ICON =
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-6-4-6 4z"/></svg>';
+
+    const viewTitles = { home: "Your feed", bookmarks: "Bookmarks" };
+    const emptyCopy = {
+      home: ["A fresh start", "Create your first post using the box above."],
+      bookmarks: ["Nothing saved yet", "Tap the bookmark on any post to keep it here."]
+    };
+
+    const state = {
+      view: "home",
+      nextId: 1,
+      posts: [],
+      profile: { name: "You", bio: "" }
+    };
+
+    function initials(name) {
+      return (name.trim().slice(0, 2) || "?").toUpperCase();
+    }
+
+    function formatTime(date) {
+      return date.toLocaleString([], {
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      });
+    }
+
+    function buildPost(post) {
+      const article = document.createElement("article");
+      article.className = "post";
+
+      const header = document.createElement("header");
+      header.className = "post-header";
+
+      const avatar = document.createElement("div");
+      avatar.className = "avatar";
+      avatar.textContent = initials(state.profile.name);
+      avatar.setAttribute("aria-hidden", "true");
+
+      const details = document.createElement("div");
+
+      const author = document.createElement("strong");
+      author.className = "post-author";
+      author.textContent = state.profile.name || "You";
+
+      const time = document.createElement("time");
+      time.className = "post-time";
+      time.dateTime = post.date.toISOString();
+      time.textContent = formatTime(post.date);
+
+      const bookmark = document.createElement("button");
+      bookmark.type = "button";
+      bookmark.className = "bookmark-button";
+      bookmark.dataset.id = post.id;
+      bookmark.setAttribute("aria-pressed", String(post.bookmarked));
+      bookmark.setAttribute(
+        "aria-label",
+        post.bookmarked ? "Remove bookmark" : "Bookmark post"
+      );
+      bookmark.innerHTML = BOOKMARK_ICON;
+
+      const content = document.createElement("p");
+      content.className = "post-text";
+      content.textContent = post.text;
+
+      details.append(author, time);
+      header.append(avatar, details, bookmark);
+      article.append(header, content);
+      return article;
+    }
+
+    function renderPosts() {
+      const list =
+        state.view === "bookmarks"
+          ? state.posts.filter((post) => post.bookmarked)
+          : state.posts;
+
+      posts.replaceChildren();
+
+      if (list.length === 0) {
+        const [title, message] = emptyCopy[state.view];
+        const empty = document.createElement("div");
+        empty.className = "empty-state";
+        const h3 = document.createElement("h3");
+        h3.textContent = title;
+        const p = document.createElement("p");
+        p.textContent = message;
+        empty.append(h3, p);
+        posts.append(empty);
+        return;
+      }
+
+      posts.append(...list.map(buildPost));
+    }
+
+    function renderProfile() {
+      document.querySelector("#profile-avatar").textContent = initials(state.profile.name);
+      document.querySelector("#stat-posts").textContent = state.posts.length;
+      document.querySelector("#stat-bookmarks").textContent =
+        state.posts.filter((post) => post.bookmarked).length;
+    }
+
+    function setView(view) {
+      state.view = view;
+
+      navButtons.forEach((navButton) => {
+        if (navButton.dataset.view === view) {
+          navButton.setAttribute("aria-current", "page");
+        } else {
+          navButton.removeAttribute("aria-current");
+        }
+      });
+
+      const showFeed = view === "home" || view === "bookmarks";
+      form.hidden = view !== "home";
+      feed.hidden = !showFeed;
+      profilePanel.hidden = view !== "profile";
+      settingsPanel.hidden = view !== "settings";
+
+      if (showFeed) {
+        feedTitle.textContent = viewTitles[view];
+        renderPosts();
+        feed.scrollTop = 0;
+      }
+      if (view === "profile") renderProfile();
+
+      const names = {
+        home: "Your feed",
+        bookmarks: "Bookmarks",
+        profile: "Your profile",
+        settings: "Settings"
+      };
+      status.textContent = `Showing ${names[view]}.`;
+    }
+
+    navButtons.forEach((navButton) => {
+      navButton.addEventListener("click", () => setView(navButton.dataset.view));
+    });
 
     input.addEventListener("input", () => {
       counter.textContent = `${input.value.length} / 280`;
@@ -72,44 +303,14 @@
 
       if (!text || text.length > 280) return;
 
-      document.querySelector("#empty-state")?.remove();
-
-      const article = document.createElement("article");
-      article.className = "post";
-
-      const header = document.createElement("header");
-      header.className = "post-header";
-
-      const avatar = document.createElement("div");
-      avatar.className = "avatar";
-      avatar.textContent = "YOU";
-      avatar.setAttribute("aria-hidden", "true");
-
-      const details = document.createElement("div");
-
-      const author = document.createElement("strong");
-      author.className = "post-author";
-      author.textContent = "You";
-
-      const now = new Date();
-      const time = document.createElement("time");
-      time.className = "post-time";
-      time.dateTime = now.toISOString();
-      time.textContent = now.toLocaleString([], {
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "2-digit"
-      });
-
-      const content = document.createElement("p");
-      content.className = "post-text";
-      content.textContent = text;
-
-      details.append(author, time);
-      header.append(avatar, details);
-      article.append(header, content);
-      posts.prepend(article);
+      const post = {
+        id: state.nextId++,
+        text,
+        date: new Date(),
+        bookmarked: false
+      };
+      state.posts.unshift(post);
+      renderPosts();
 
       input.value = "";
       counter.textContent = "0 / 280";
@@ -117,8 +318,63 @@
 
       feed.scrollTop = 0;
       input.focus();
-      status.textContent = `Post added at ${time.textContent}.`;
+      status.textContent = `Post added at ${formatTime(post.date)}.`;
     });
+
+    // Bookmark 
+    posts.addEventListener("click", (event) => {
+      const toggle = event.target.closest(".bookmark-button");
+      if (!toggle) return;
+
+      const post = state.posts.find((item) => item.id === Number(toggle.dataset.id));
+      if (!post) return;
+
+      post.bookmarked = !post.bookmarked;
+      status.textContent = post.bookmarked ? "Post bookmarked." : "Bookmark removed.";
+
+      if (state.view === "bookmarks") {
+        renderPosts();
+      } else {
+        toggle.setAttribute("aria-pressed", String(post.bookmarked));
+        toggle.setAttribute(
+          "aria-label",
+          post.bookmarked ? "Remove bookmark" : "Bookmark post"
+        );
+      }
+    });
+
+    // Profile
+    document.querySelector("#profile-name").addEventListener("input", (event) => {
+      state.profile.name = event.target.value.trim() || "You";
+      renderProfile();
+    });
+
+    document.querySelector("#profile-bio").addEventListener("input", (event) => {
+      state.profile.bio = event.target.value;
+    });
+
+    // Settings
+    document.querySelectorAll('input[name="text-size"]').forEach((radio) => {
+      radio.addEventListener("change", () => {
+        document.body.dataset.size = radio.value;
+      });
+    });
+
+    document.querySelector("#show-times").addEventListener("change", (event) => {
+      document.body.classList.toggle("hide-times", !event.target.checked);
+    });
+
+    document.querySelector("#clear-posts").addEventListener("click", () => {
+      if (state.posts.length === 0) {
+        status.textContent = "There are no posts to delete.";
+        return;
+      }
+      if (!confirm("Delete all posts and bookmarks? This can't be undone.")) return;
+      state.posts = [];
+      status.textContent = "All posts deleted.";
+    });
+
+    setView("home");
   </script>
 </body>
 </html>
